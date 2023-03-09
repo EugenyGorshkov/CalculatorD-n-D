@@ -5,24 +5,18 @@ import { ItemTypes } from "../../../itemTypes/itemTypes";
 
 import styles from "./Equals.module.scss";
 
-export const Equals: React.FC = () => {
-  const [{ isDragging }, drag, dragPreview] = useDrag(() => ({
-		// "type" is required. It is used by the "accept" specification of drop targets.
-    type: ItemTypes.EQUALS,
-    item: {
-      type: ItemTypes.EQUALS
-    },
-		// The collect function utilizes a "monitor" instance (see the Overview for what this is)
-		// to pull important pieces of state from the DnD system.
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging()
-    })
-  }))
+interface EqualsProps {
+  isDragging: boolean,
+  canDragging: boolean
+}
+
+export const Equals: React.FC<EqualsProps> = ({
+  isDragging
+}) => {
 
   return (
     <>
       <div
-        ref={drag}
         className={cn(
           "flex flex-col m-[6px] h-[72px] w-[240px] bg-white rounded font-sans text-sm font-medium",
           styles.equalsWrapper,
