@@ -1,5 +1,5 @@
 import cn from "classnames";
-import React from "react";
+import React, { useRef } from "react";
 import { useDrag } from "react-dnd";
 import { Element } from "../../../App";
 import { Display } from "../Display";
@@ -8,16 +8,19 @@ import { Numbers } from "../Numbers";
 import { Operators } from "../Operators";
 
 interface ItemProps {
-  value: string;
-  mode: string;
-  id: number;
-  type: string;
-  contain: Element[];
-  canDraging: boolean;
-  inConstructor: boolean;
+  index: number,
+  value: string,
+  mode: string,
+  id: number,
+  type: string,
+  contain: Element[],
+  canDraging: boolean,
+  inConstructor: boolean,
+  deleteFromContainDblClick: (item: Element) => void,
 }
 
 export const Item: React.FC<ItemProps> = ({
+  index,
   value,
   mode,
   id,
@@ -25,23 +28,21 @@ export const Item: React.FC<ItemProps> = ({
   contain,
   canDraging,
   inConstructor,
+  deleteFromContainDblClick
 }) => {
-  const [{ isDragging }, drag, dragPreview] = useDrag(
+  // const ref = useRef<HTMLDivElement>(null)
+
+  const [{ isDragging }, drag] = useDrag(
     () => ({
-      // "type" is required. It is used by the "accept" specification of drop targets.
       type: type,
       item: {
+        index: index,
         id: id,
         type: type,
         canDrag: type === "display" ? false : true,
         inConstructor: false,
       },
-      // The collect function utilizes a "monitor" instance (see the Overview for what this is)
-      // to pull important pieces of state from the DnD system.
-
       canDrag: () => (mode === "Runtime" ? false : true && canDraging),
-      // &&
-      // contain.length > 0 ? (contain.filter(el => {return el.type === type}) ? false : true) : true
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),
         canDrag: monitor.canDrag(),
@@ -54,9 +55,24 @@ export const Item: React.FC<ItemProps> = ({
     <div
       ref={drag}
       onDoubleClick={() => {
-        console.log("dbl click");
+        deleteFromContainDblClick({
+          id: id,
+          type: type,
+          canDrag: type === "display" ? false : true,
+          inConstructor: false,
+        })
       }}
-      className={cn(inConstructor ? "opacity-50" : "opacity-100")}
+      className={cn(
+        inConstructor ? "opacity-50" : "opacity-100",
+        type === "display"
+          ? !canDraging
+            ? inConstructor
+              ? ""
+              : "hover:cursor-no-drop"
+            : ""
+          : "",
+        mode === "Runtime" ? "hover:cursor-default" : ""
+      )}
     >
       {value === "display" ? (
         <Display isDragging={isDragging} canDragging={canDraging} />
@@ -64,17 +80,17 @@ export const Item: React.FC<ItemProps> = ({
         ""
       )}
       {value === "operators" ? (
-        <Operators isDragging={isDragging} canDragging={canDraging} />
+        <Operators isDragging={isDragging} canDragging={canDraging} mode={mode}/>
       ) : (
         ""
       )}
       {value === "numbers" ? (
-        <Numbers isDragging={isDragging} canDragging={canDraging} />
+        <Numbers isDragging={isDragging} canDragging={canDraging} mode={mode}/>
       ) : (
         ""
       )}
       {value === "equals" ? (
-        <Equals isDragging={isDragging} canDragging={canDraging} />
+        <Equals isDragging={isDragging} canDragging={canDraging} mode={mode}/>
       ) : (
         ""
       )}

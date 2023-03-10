@@ -7,11 +7,13 @@ import { ItemTypes } from "../../../itemTypes/itemTypes";
 
 interface OperatorsProps {
   isDragging: boolean,
-  canDragging: boolean
+  canDragging: boolean,
+  mode: string
 }
 
 export const Operators: React.FC<OperatorsProps> = ({
   isDragging,
+  mode
 }) => {
 
 
@@ -27,7 +29,8 @@ export const Operators: React.FC<OperatorsProps> = ({
         <div
           className={cn(
             "h-[48px] w-[52px] m-1 flex items-center justify-center",
-            styles.button
+            styles.button,
+            mode === 'Runtime' ? 'hover:cursor-pointer' : ''
           )}
         >
           /
@@ -35,7 +38,8 @@ export const Operators: React.FC<OperatorsProps> = ({
         <div
           className={cn(
             "h-[48px] w-[52px] m-1 flex items-center justify-center",
-            styles.button
+            styles.button,
+            mode === 'Runtime' ? 'hover:cursor-pointer' : ''
           )}
         >
           х
@@ -43,7 +47,8 @@ export const Operators: React.FC<OperatorsProps> = ({
         <div
           className={cn(
             "h-[48px] w-[52px] m-1 flex items-center justify-center",
-            styles.button
+            styles.button,
+            mode === 'Runtime' ? 'hover:cursor-pointer' : ''
           )}
         >
           -
@@ -51,7 +56,8 @@ export const Operators: React.FC<OperatorsProps> = ({
         <div
           className={cn(
             "h-[48px] w-[52px] m-1 flex items-center justify-center",
-            styles.button
+            styles.button,
+            mode === 'Runtime' ? 'hover:cursor-pointer' : ''
           )}
         >
           +

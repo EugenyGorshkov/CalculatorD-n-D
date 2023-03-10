@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 // import { store } from "./Redux/store";
-import { Provider } from "react-redux";
+// import { Provider } from "react-redux";
 import cn from "classnames";
 
 import { Mode } from "./components/Mode";
@@ -14,17 +14,21 @@ import "./index.css";
 import { Item } from "./components/Calculator/Item/Item";
 
 export interface Element {
-  id: number;
-  type: string;
-  canDrag: boolean;
-  inConstructor: boolean
+  index?: number,
+  id: number,
+  type: string,
+  canDrag: boolean,
+  inConstructor: boolean,
 }
 
 function App() {
+  // mode state
   const [mode, setMode] = useState<"Constructor" | "Runtime">("Constructor");
 
+  // state items in right container
   const [contain, setContain] = useState<Element[] | []>([]);
 
+  // state items in left container
   const [elements, setElements] = useState<Element[]>([
     { id: 0, type: ItemTypes.DISPLAY, canDrag: true, inConstructor: false },
     { id: 1, type: ItemTypes.OPERATORS, canDrag: true, inConstructor: false },
@@ -43,8 +47,22 @@ function App() {
     // console.log(res)
   };
 
+  const deleteFromContainDblClick = (item: Element) => {
+    if(mode === 'Runtime') {
+      return
+    } else {
+      setContain(contain.filter(el => el.id !== item.id))
+      setElements(elements => {
+        return (
+          elements.map(el => el.id === item.id ? {...el, canDrag: !el.canDrag, inConstructor: !el.inConstructor } : el)
+        )
+      })
+      }
+    }
+  
+
   useEffect(() => {
-    console.log(contain.length > 0);
+    console.log(contain);
     console.log(elements);
   }, [contain]);
 
@@ -63,12 +81,9 @@ function App() {
                     mode === "Runtime" ? "opacity-0" : ""
                   )}
                 >
-                  {/* <Display/>
-                <Operators/>
-                <Numbers/>
-                <Equals/> */}
-                  {elements.map((el) => (
+                  {elements.map((el,index) => (
                     <Item
+                      index={index}
                       key={el.id}
                       value={el.type}
                       mode={mode}
@@ -76,15 +91,14 @@ function App() {
                       type={el.type}
                       contain={contain}
                       canDraging={el.canDrag}
-                      inConstructor={el.inConstructor}
+                      inConstructor={el.inConstructor} 
+                      deleteFromContainDblClick={()=>{}}
                     />
                   ))}
-                  {/* {elements.map(el => (
-                  <div key={el.id}>{el.component}</div>
-                ))} */}
                 </div>
                 <div className="flex flex-col">
                   <Contain
+                    deleteFromContainDblClick={deleteFromContainDblClick}
                     markAsContain={markAsContain}
                     contain={contain}
                     mode={mode}

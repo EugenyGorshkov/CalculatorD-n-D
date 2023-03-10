@@ -7,11 +7,13 @@ import styles from "./Numbers.module.scss";
 
 interface NumbersProps {
   isDragging: boolean,
-  canDragging: boolean
+  canDragging: boolean,
+  mode: string
 }
 
 export const Numbers: React.FC<NumbersProps> = ({
-  isDragging
+  isDragging,
+  mode
 }) => {
 
 
@@ -28,7 +30,8 @@ export const Numbers: React.FC<NumbersProps> = ({
           <div
             className={cn(
               "h-[48px] w-[72px] flex items-center justify-center m-1",
-              styles.button
+              styles.button,
+              mode === 'Runtime' ? 'hover:cursor-pointer' : ''
             )}
           >
             7
@@ -36,7 +39,8 @@ export const Numbers: React.FC<NumbersProps> = ({
           <div
             className={cn(
               "h-[48px] w-[72px] flex items-center justify-center m-1",
-              styles.button
+              styles.button,
+              mode === 'Runtime' ? 'hover:cursor-pointer' : ''
             )}
           >
             8
@@ -44,7 +48,8 @@ export const Numbers: React.FC<NumbersProps> = ({
           <div
             className={cn(
               "h-[48px] w-[72px] flex items-center justify-center m-1",
-              styles.button
+              styles.button,
+              mode === 'Runtime' ? 'hover:cursor-pointer' : ''
             )}
           >
             9
@@ -52,7 +57,8 @@ export const Numbers: React.FC<NumbersProps> = ({
           <div
             className={cn(
               "h-[48px] w-[72px] flex items-center justify-center m-1",
-              styles.button
+              styles.button,
+              mode === 'Runtime' ? 'hover:cursor-pointer' : ''
             )}
           >
             4
@@ -60,7 +66,8 @@ export const Numbers: React.FC<NumbersProps> = ({
           <div
             className={cn(
               "h-[48px] w-[72px] flex items-center justify-center m-1",
-              styles.button
+              styles.button,
+              mode === 'Runtime' ? 'hover:cursor-pointer' : ''
             )}
           >
             5
@@ -68,7 +75,8 @@ export const Numbers: React.FC<NumbersProps> = ({
           <div
             className={cn(
               "h-[48px] w-[72px] flex items-center justify-center m-1",
-              styles.button
+              styles.button,
+              mode === 'Runtime' ? 'hover:cursor-pointer' : ''
             )}
           >
             6
@@ -76,7 +84,8 @@ export const Numbers: React.FC<NumbersProps> = ({
           <div
             className={cn(
               "h-[48px] w-[72px] flex items-center justify-center m-1",
-              styles.button
+              styles.button,
+              mode === 'Runtime' ? 'hover:cursor-pointer' : ''
             )}
           >
             1
@@ -84,7 +93,8 @@ export const Numbers: React.FC<NumbersProps> = ({
           <div
             className={cn(
               "h-[48px] w-[72px] flex items-center justify-center m-1",
-              styles.button
+              styles.button,
+              mode === 'Runtime' ? 'hover:cursor-pointer' : ''
             )}
           >
             2
@@ -92,7 +102,8 @@ export const Numbers: React.FC<NumbersProps> = ({
           <div
             className={cn(
               "h-[48px] w-[72px] flex items-center justify-center m-1",
-              styles.button
+              styles.button,
+              mode === 'Runtime' ? 'hover:cursor-pointer' : ''
             )}
           >
             3
@@ -102,7 +113,8 @@ export const Numbers: React.FC<NumbersProps> = ({
           <div
             className={cn(
               "h-[48px] w-[152px] flex items-center justify-center m-1",
-              styles.button
+              styles.button,
+              mode === 'Runtime' ? 'hover:cursor-pointer' : ''
             )}
           >
             0
@@ -110,7 +122,8 @@ export const Numbers: React.FC<NumbersProps> = ({
           <div
             className={cn(
               "h-[48px] w-[72px] flex items-center justify-center m-1",
-              styles.button
+              styles.button,
+              mode === 'Runtime' ? 'hover:cursor-pointer' : ''
             )}
           >
             ,

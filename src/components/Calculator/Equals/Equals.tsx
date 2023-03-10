@@ -8,10 +8,12 @@ import styles from "./Equals.module.scss";
 interface EqualsProps {
   isDragging: boolean,
   canDragging: boolean
+  mode: string
 }
 
 export const Equals: React.FC<EqualsProps> = ({
-  isDragging
+  isDragging,
+  mode,
 }) => {
 
   return (
@@ -26,7 +28,8 @@ export const Equals: React.FC<EqualsProps> = ({
           <div
             className={cn(
               "h-[64px] w-[232px] flex items-center justify-center m-1",
-              styles.button
+              styles.button,
+              mode === 'Runtime' ? 'hover:cursor-pointer' : ''
             )}
           >
             =
