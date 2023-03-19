@@ -1,24 +1,19 @@
-import { useEffect, useState } from "react";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-// import { store } from "./Redux/store";
-// import { Provider } from "react-redux";
+import { useCallback, useEffect, useState } from "react";
+import update from 'immutability-helper'
 import cn from "classnames";
 
 import { Mode } from "./components/Mode";
-import { Contain } from "./components/Contain";
-
-import { ItemTypes } from "./itemTypes/itemTypes";
+import { Container } from "./components/Container";
+import { ItemElement } from "./components/ItemElement/ItemElement";
 
 import "./index.css";
-import { Item } from "./components/Calculator/Item/Item";
 
 export interface Element {
-  index?: number,
-  id: number,
-  type: string,
-  canDrag: boolean,
-  inConstructor: boolean,
+  index?: number;
+  id: number;
+  type: string;
+  canDrag: boolean;
+  inConstructor: boolean;
 }
 
 function App() {
@@ -30,86 +25,75 @@ function App() {
 
   // state items in left container
   const [elements, setElements] = useState<Element[]>([
-    { id: 0, type: ItemTypes.DISPLAY, canDrag: true, inConstructor: false },
-    { id: 1, type: ItemTypes.OPERATORS, canDrag: true, inConstructor: false },
-    { id: 2, type: ItemTypes.NUMBERS, canDrag: true, inConstructor: false },
-    { id: 3, type: ItemTypes.EQUALS, canDrag: true, inConstructor: false },
+    { id: 0, type:'display', canDrag: true, inConstructor: false },
+    { id: 1, type:'operators', canDrag: true, inConstructor: false },
+    { id: 2, type:'numbers', canDrag: true, inConstructor: false },
+    { id: 3, type:'equals', canDrag: true, inConstructor: false },
   ]);
 
-  const markAsContain = (item: Element) => {
-    console.log(item);
-    setContain((contain) => [...contain, item]);
-    setElements(elements => {
-      return (
-        elements.map(el => el.id === item.id ? {...el, canDrag: !el.canDrag, inConstructor: !el.inConstructor } : el)
-      )
-    })
-    // console.log(res)
+  const deleteFromContainDblClick = (item: Element) => {
+    if (mode === "Runtime") {
+      return;
+    } else {
+      setContain(contain.filter((el) => el.id !== item.id));
+      setElements((elements) => {
+        return elements.map((el) =>
+          el.id === item.id
+            ? { ...el, canDrag: !el.canDrag, inConstructor: !el.inConstructor }
+            : el
+        );
+      });
+    }
   };
 
-  const deleteFromContainDblClick = (item: Element) => {
-    if(mode === 'Runtime') {
-      return
-    } else {
-      setContain(contain.filter(el => el.id !== item.id))
-      setElements(elements => {
-        return (
-          elements.map(el => el.id === item.id ? {...el, canDrag: !el.canDrag, inConstructor: !el.inConstructor } : el)
-        )
+  const sortFunc = (prevIndex:number ,index:number) => {
+    console.log('prevIndex',prevIndex)
+    console.log('index',index)
+    if(!index || !prevIndex) return
+    setContain((contain) => 
+      update(contain, {
+        $splice: [
+          [prevIndex, 1],
+          [index, 0, contain[prevIndex] as Element],
+        ],
       })
-      }
-    }
-  
 
-  useEffect(() => {
-    console.log(contain);
-    console.log(elements);
-  }, [contain]);
+
+      // {const newContain = [...contain]
+      // const itemCurrent = newContain[prevIndex]
+      // newContain[prevIndex] = newContain[index]
+      // newContain[index] = itemCurrent
+      // console.log(newContain)
+      // return newContain}
+    )
+  }
 
   return (
-    <>
-      {/* <Provider store={store}> */}
-        <div className="container mx-auto flex justify-center items-center h-full">
-          <div className="flex flex-col items-end gap-[24px]">
-            <Mode setMode={setMode} mode={mode} />
-            <div className="flex gap-[44px]">
-              {/* тут подключение либы DnD react*/}
-              <DndProvider backend={HTML5Backend}>
-                <div
-                  className={cn(
-                    "flex flex-col",
-                    mode === "Runtime" ? "opacity-0" : ""
-                  )}
-                >
-                  {elements.map((el,index) => (
-                    <Item
-                      index={index}
-                      key={el.id}
-                      value={el.type}
-                      mode={mode}
-                      id={el.id}
-                      type={el.type}
-                      contain={contain}
-                      canDraging={el.canDrag}
-                      inConstructor={el.inConstructor} 
-                      deleteFromContainDblClick={()=>{}}
-                    />
-                  ))}
-                </div>
-                <div className="flex flex-col">
-                  <Contain
-                    deleteFromContainDblClick={deleteFromContainDblClick}
-                    markAsContain={markAsContain}
-                    contain={contain}
-                    mode={mode}
-                  />
-                </div>
-              </DndProvider>
+    <div className="container mx-auto flex justify-center items-center h-full">
+      <div className="flex flex-col items-end gap-[24px]">
+        <Mode setMode={setMode} mode={mode} />
+        <div className="flex gap-[44px]">          
+            <div
+              className={cn(
+                "flex flex-col",
+                mode === "Runtime" ? "opacity-0" : ""
+              )}
+            >
+              {elements.map((item) => (
+                <ItemElement item={item} key={item.id} mode={mode} />
+              ))}
             </div>
-          </div>
+            <div className="flex flex-col">
+              <Container
+                deleteFromContainDblClick={deleteFromContainDblClick}
+                contain={contain}
+                mode={mode}
+                sortFunc={sortFunc}
+              />
+            </div>
         </div>
-      {/* </Provider> */}
-    </>
+      </div>
+    </div>
   );
 }
 

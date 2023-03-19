@@ -1,18 +1,15 @@
 import cn from "classnames";
 import React from "react";
-import { useDrag } from "react-dnd";
-import { ItemTypes } from "../../../itemTypes/itemTypes";
 
 import styles from "./Numbers.module.scss";
 
 interface NumbersProps {
-  isDragging: boolean,
   canDragging: boolean,
   mode: string
 }
 
 export const Numbers: React.FC<NumbersProps> = ({
-  isDragging,
+  canDragging,
   mode
 }) => {
 
@@ -23,7 +20,7 @@ export const Numbers: React.FC<NumbersProps> = ({
         className={cn(
           "flex flex-col m-[6px] h-[224px] w-[240px] bg-white rounded font-sans text-sm font-medium",
           styles.numbersWrapper,
-          isDragging ? 'opacity-50' : 'opacity-100'
+          // isDragging ? 'opacity-50' : 'opacity-100'
         )}
       >
         <div className="flex flex-wrap">

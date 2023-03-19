@@ -1,18 +1,15 @@
 import cn from "classnames";
 import React from "react";
-import { useDrag } from "react-dnd";
-import { ItemTypes } from "../../../itemTypes/itemTypes";
 
 import styles from "./Equals.module.scss";
 
 interface EqualsProps {
-  isDragging: boolean,
   canDragging: boolean
   mode: string
 }
 
 export const Equals: React.FC<EqualsProps> = ({
-  isDragging,
+  canDragging,
   mode,
 }) => {
 
@@ -22,7 +19,7 @@ export const Equals: React.FC<EqualsProps> = ({
         className={cn(
           "flex flex-col m-[6px] h-[72px] w-[240px] bg-white rounded font-sans text-sm font-medium",
           styles.equalsWrapper,
-          isDragging ? 'opacity-50' : 'opacity-100'
+          // isDragging ? 'opacity-50' : 'opacity-100'
         )}
       >
           <div
